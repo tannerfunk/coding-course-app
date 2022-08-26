@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import config from '../config';
+import '../styles/reset.css';
 import '../styles/global.css';
 
 
 const Courses = () => {
 
     const [data, setData] = useState([]);
-    
+    //gotta add async/await etc!
     useEffect(() => {
         const user = `${config.apiBaseUrl}/courses`;
         axios.get(user)
