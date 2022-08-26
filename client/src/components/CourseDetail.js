@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import config from '../config';
@@ -8,8 +9,9 @@ import '../styles/global.css';
 const CourseDetail = (props) => {
     const [courseData, setCourseData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { id } = useParams();
 
-    const url = `${config.apiBaseUrl}/courses/1`
+    const url = `${config.apiBaseUrl}/courses/${id}`
 
     const getCourseData = async () => {
         await axios.get(url)
