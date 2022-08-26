@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import config from '../config';
+import { Link } from 'react-router-dom';
 import '../styles/reset.css';
 import '../styles/global.css';
 
@@ -25,10 +26,10 @@ const Courses = () => {
         <div className="wrap main--grid">
             { coursesData.map((coursesData) => {
                 return (
-                    <a key={coursesData.id} className="course--module course--link" href="course-detail.html">
+                    <Link key={coursesData.id} className="course--module course--link" to={`/courses/${coursesData.id}`}>
                         <h2 className="course--label">Course</h2>
                         <h3 className="course--title">{coursesData.title}</h3>
-                    </a>
+                    </Link>
                 );
             })}
             <a className="course--module course--add--module" href="create-course.html">

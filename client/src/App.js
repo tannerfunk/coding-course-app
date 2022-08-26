@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 
 // Components
 import Courses from './components/Courses';
@@ -8,11 +9,14 @@ import CourseDetail from './components/CourseDetail';
 function App() {
   
   return (
-    <span>
+    <>
       <Header />
-      <CourseDetail />
-      <Courses />
-    </span>
+
+      <Routes>
+        <Route exact path='/' element={ <Courses />} />
+        <Route path='/courses/:id' element={ <CourseDetail />} />
+      </Routes>
+    </>
   );
 }
 
