@@ -5,7 +5,6 @@ import Courses from './components/Courses';
 import Header from './components/Header';
 import CourseDetail from './components/CourseDetail';
 
-
 function App() {
   
   return (
@@ -14,7 +13,6 @@ function App() {
       <CourseDetail />
       <Courses />
     </span>
-
   );
 }
 

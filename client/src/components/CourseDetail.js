@@ -4,20 +4,23 @@ import config from '../config';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+const url = `${config.apiBaseUrl}/courses/1`;
 
 const CourseDetail = () => {
-
     const [data, setData] = useState([]);
-    
+    const url = `${config.apiBaseUrl}/courses/1`
+
+    const getData = async () => {
+        await axios.get(url)
+            .then(response => setData(response.data.courses))
+            .catch(error => console.log('Error fetching and parsing data', error))
+    }
+
     useEffect(() => {
-        //NOT quite connecting to the api.. gotta put in async/await!
-        const id = 1;
-        const user = `${config.apiBaseUrl}/courses/${id}`;
-        axios.get(user)
-          .then(response => setData(response.data.courses), console.log('success connecting to your REST API!'))
-          .catch(error => console.log('Error fetching and parsing data', error))
-        console.log(data);
-        }, []);
+        getData();
+    // }, []); 
+    }); 
+    console.log(data);
     return (
         <div className="wrap">
                 <h2>Course Detail</h2>
@@ -25,8 +28,8 @@ const CourseDetail = () => {
                     <div className="main--flex">
                         <div>
                             <h3 className="course--detail--title">Course</h3>
-                            {/* <h4 class="course--name">{data.title}</h4>
-                            <p>By {data.firstName} {data.lastName}</p> */}
+                            <h4 className="course--name">{data.title}</h4>
+                            <p>By {data.student.firstName} {data.student.lastName}</p>
 
                             <p>High-end furniture projects are great to dream about. But unless you have a well-equipped shop and some serious woodworking experience to draw on, it can be difficult to turn the dream into a reality.</p>
                             
