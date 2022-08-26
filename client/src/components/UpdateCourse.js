@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
 import '../styles/reset.css';
@@ -30,6 +30,7 @@ const UpdateCourse = () => {
     // const [errors, setErrors] = useState([]);
 
     return(
+        
         <div className="wrap">
                 <h2>Update Course</h2>
                 <form>
