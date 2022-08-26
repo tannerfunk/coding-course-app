@@ -124,7 +124,7 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
     res.status(200)
     res.json({
         title: course.title,
-        descriptioin: course.description,
+        description: course.description,
         estimatedTime: course.estimatedTime,
         materialsNeeded: course.materialsNeeded,
         student: course.student

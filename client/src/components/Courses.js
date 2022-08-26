@@ -7,27 +7,27 @@ import '../styles/global.css';
 
 
 const Courses = () => {
-    const [data, setData] = useState([]);
+    const [coursesData, setCoursesData] = useState([]);
     const url = `${config.apiBaseUrl}/courses`
 
-    const getData = async () => {
+    const getCoursesData = async () => {
         await axios.get(url)
-            .then(response => setData(response.data.courses))
+            .then(response => setCoursesData(response.data.courses))
             .catch(error => console.log('Error fetching and parsing data', error))
     }
 
     useEffect(() => {
-        getData();
+        getCoursesData();
     // }, []); 
-    }); 
-    console.log(data);
+    }, []); 
+    // console.log(coursesData);
     return (
         <div className="wrap main--grid">
-            { data.map((data) => {
+            { coursesData.map((coursesData) => {
                 return (
-                    <a key={data.id} className="course--module course--link" href="course-detail.html">
+                    <a key={coursesData.id} className="course--module course--link" href="course-detail.html">
                         <h2 className="course--label">Course</h2>
-                        <h3 className="course--title">{data.title}</h3>
+                        <h3 className="course--title">{coursesData.title}</h3>
                     </a>
                 );
             })}
