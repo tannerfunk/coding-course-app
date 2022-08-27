@@ -1,13 +1,47 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import axios from 'axios';
 import config from '../config';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+
+// import Context from './Context/Provider'
+
+const url = config.apiBaseUrl
+
 const UserSignIn = () => {
+    // const { setAuth } = useContext(Context);
+    const userRef = useRef();
+    const errRef = useRef();
+
+
+
     const [userData, setUserData] = useState([]);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+    
 
 // check the scoreboard update 2 project
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try{
+    //         const response = await axios.post(`${url}/users`,
+    //             JSON.stringify({emailAddress: email, password: password}),
+    //             {
+    //                 headers: {
+    //                     'Content-Type': 'application/json; charset=utf-8',
+    //                   }, withCredentials: true
+    //             }
+    //         );
+    //         console.log(JSON.stringify(response?.data));
+    //         setAuth({})
+    //     } catch (err){
+
+    //     }
+    // } onSubmit={handleSubmit}
+
 
     return(
         <div className="form--centered">

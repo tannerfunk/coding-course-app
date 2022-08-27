@@ -22,9 +22,20 @@ const CourseDetail = (props) => {
 
     useEffect(() => {
         getCourseData();
+    }, []);
 
-    // }, []); 
-    }, []); 
+
+    // const deleteCourse =  async () => {
+    //     const headers = { //YOU ARE HERE TRYNA DEAL
+    //         'Content-Type': 'application/json; charset=utf-8'
+    //     }
+    // };
+
+
+
+    //     await axios.delete(url)
+
+    // }
     console.log(courseData);
     return (
         <>

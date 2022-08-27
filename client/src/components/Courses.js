@@ -1,34 +1,31 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
-import config from '../config';
+import React, {useEffect, useContext} from 'react';
 import { Link } from 'react-router-dom';
+import {Context} from './Context/Provider';
 import '../styles/reset.css';
 import '../styles/global.css';
 
 
 
 const Courses = () => {
-    const [coursesData, setCoursesData] = useState([]);
-    const url = `${config.apiBaseUrl}/courses`
 
-    const getCoursesData = async () => {
-        await axios.get(url)
-            .then(response => setCoursesData(response.data.courses))
-            .catch(error => console.log('Error fetching and parsing data', error))
-    }
+    const {actions} = useContext(Context);
+    const {courses} = useContext(Context);
 
     useEffect(() => {
-        getCoursesData();
-    // }, []); 
+        const getCourses = async () => {
+            await actions.getCourses();
+        };
+
+        getCourses();
     }, []); 
     // console.log(coursesData);
     return (
         <div className="wrap main--grid">
-            { coursesData.map((coursesData) => {
+            { courses.map((course, id) => {
                 return (
-                    <Link key={coursesData.id} className="course--module course--link" to={`/courses/${coursesData.id}`}>
+                    <Link key={id} className="course--module course--link" to={`/courses/${course.id}`}>
                         <h2 className="course--label">Course</h2>
-                        <h3 className="course--title">{coursesData.title}</h3>
+                        <h3 className="course--title">{course.title}</h3>
                     </Link>
                 );
             })}
