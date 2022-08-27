@@ -1,42 +1,35 @@
-import React, {useState, useEffect} from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import axios from 'axios';
-import config from '../config';
+import {Context} from './Context/Provider';
 import '../styles/reset.css';
 import '../styles/global.css';
 
 const CourseDetail = (props) => {
-    const [courseData, setCourseData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const {actions} = useContext(Context);
+    const {course} = useContext(Context);
+    const {user} = useContext(Context);
+
     const { id } = useParams();
 
-    const url = `${config.apiBaseUrl}/courses/${id}`
+    const goHome = useNavigate();
 
-    const getCourseData = async () => {
-        await axios.get(url)
-            .then(response => setCourseData(response.data))
-            .catch(error => console.log('Error fetching and parsing data', error))
-            .finally(() => setIsLoading(false));
+	useEffect(() => {
+		const getCourse = async () => {
+			await actions.getCourse(id);
+		};
+		getCourse();
+	}, []);
+
+    const deleteCourse = () => {
+        actions.deleteCourse(course.id)
+            .then(response => {
+                if (response === true) {
+                    goHome('/');
+                }
+            }) 
     }
-
-    useEffect(() => {
-        getCourseData();
-    }, []);
-
-
-    // const deleteCourse =  async () => {
-    //     const headers = { //YOU ARE HERE TRYNA DEAL
-    //         'Content-Type': 'application/json; charset=utf-8'
-    //     }
-    // };
-
-
-
-    //     await axios.delete(url)
-
-    // }
-    console.log(courseData);
+    // if(course !== null) {}
     return (
         <>
             <div className="actions--bar">
@@ -52,20 +45,19 @@ const CourseDetail = (props) => {
                         <div className="main--flex">
                             <div>
                                 <h3 className="course--detail--title">Course</h3>
-                                <h4 className="course--name">{courseData.title}</h4>
-                                {/* optional chaining! https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining */}
-                                <p>By {courseData.student?.firstName} {courseData.student?.lastName} </p>
+                                <h4 className="course--name">{course.title}</h4>
+                                <p>By {course.student.firstName} {course.student.lastName} </p>
 
-                                <ReactMarkdown>{courseData.description}</ReactMarkdown>
+                                <ReactMarkdown>{course.description}</ReactMarkdown>
                                 
                             </div>
                             <div>
                                 <h3 className="course--detail--title">Estimated Time</h3>
-                                <p>{courseData.estimatedTime}</p>
+                                <p>{course.estimatedTime}</p>
 
                                 <h3 className="course--detail--title">Materials Needed</h3>
                                 <ul className="course--detail--list">
-                                    <ReactMarkdown>{courseData.materialsNeeded}</ReactMarkdown>
+                                    <ReactMarkdown>{course.materialsNeeded}</ReactMarkdown>
                                 </ul>
                             </div>
                         </div>

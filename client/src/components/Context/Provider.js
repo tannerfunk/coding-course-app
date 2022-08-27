@@ -6,10 +6,24 @@ export const Context = createContext();
 
 export const Provider = ({ children }) => {
     const [courses, setCourses] = useState([]);
-    const [course, setCourse] = useState(null);
-    const [user, setUser] = useState(null);
-    const [authEmail, setAuthEmail] = useState('');
-    const [authPassword, setAuthPassword] = useState('');
+    const [course, setCourse] = useState({
+        description: "",
+        estimatedTime: "",
+        materialsNeeded: "",
+        title: "",
+        student: {
+            firstName: "",
+            lastName: "",
+            emailAddress: "",
+        }
+    });
+    const [user, setUser] = useState({
+        firstName: "",
+        lastName: "",
+        emailAddress: "",
+    });
+    const [emailAddress, setEmailAddress] = useState('');
+    const [password, setPassword] = useState('');
 
     function api(path, method, body = null, requiresAuth = false, credentials = null) {
         const url = config.apiBaseUrl + path;
@@ -30,15 +44,15 @@ export const Provider = ({ children }) => {
             options.headers['Authorization'] = `Basic ${encodedCredentials}`
         }
 
-
-        return fetch(url, options);
+        const fetched = fetch(url, options);
+        return fetched;
     };
 
     async function getUser(emailAddress, password) {
-        const response = await this.api(`/users`, 'GET', null, true, { emailAddress, password });
+        const response = await api(`/users`, 'GET', null, true, { emailAddress, password });
         if (response.status === 200){
-            setAuthEmail(emailAddress);
-            setAuthPassword(password);
+            setEmailAddress(emailAddress);
+            setPassword(password);
             return response.json()
                 .then(data => setUser(data));
         }
@@ -51,7 +65,7 @@ export const Provider = ({ children }) => {
     }
 
     async function createUser(user) {
-        const response = await this.api(`/users`, 'POST', user);
+        const response = await api(`/users`, 'POST', user);
         if (response.status === 201) {
             return [];
         }
@@ -66,35 +80,34 @@ export const Provider = ({ children }) => {
     }
 
     async function getCourses() {
-        const response = await this.api(`/courses`);
+        const response = await api(`/courses`);
         if (response.status === 200) {
-            return response.json()// check here if weird errors and above i took out null
+            response.json().then(data => setCourses(data.courses));
+            // console.log(courses);
+            return (courses);
         } else if (response.status === 401) {
-            return response.json()
-                .then(data => {
-                    return data.errors;
-                });
+            return null
         } else {
             throw new Error();
         }
     }
 
     async function getCourse(id) {
-        const response = await this.api(`/courses/${id}`, 'GET');
+        const response = await api(`/courses/${id}`);
+    
         if (response.status === 200) {
-            return response.json()
+          response.json()
+            .then(data => setCourse(data));
+          return (course);
         } else if (response.status === 404) {
-            return response.json()
-                .then(data => {
-                    return data.errors;
-                });
+          return null;
         } else {
-            throw new Error();
+          throw new Error();
         }
-    }
+      };
 
     async function createCourse(course, emailAddress, password) {
-        const response = await this.api(`/courses`, 'POST', course, true, {emailAddress, password});
+        const response = await api(`/courses`, 'POST', course, true, {emailAddress, password});
         if (response.status === 201) {
             return response.json()
         } else if (response.status === 400) {
@@ -107,8 +120,9 @@ export const Provider = ({ children }) => {
         }
     }
 
-    async function updateCourse(course, emailAddress, password) {
-        const response = await this.api(`/courses/${course.id}`, 'PUT', course, true, {emailAddress, password});
+    async function updateCourse(id, emailAddress, password) {
+        console.log(id);
+        const response = await api(`/courses/${id}`, 'PUT', course, true, {emailAddress, password});
         if (response.status === 204) {
             return response.json()
         } else if (response.status === 400) {
@@ -122,7 +136,7 @@ export const Provider = ({ children }) => {
     }
 
     async function deleteCourse(id, emailAddress, password) {
-        const response = await this.api(`/courses/${id}`, 'DELETE', null, true, {emailAddress, password});
+        const response = await api(`/courses/${id}`, 'DELETE', null, true, {emailAddress, password});
         if (response.status === 204) {
             return null;
         } else {
@@ -132,8 +146,8 @@ export const Provider = ({ children }) => {
 
     async function signOut() {
         setUser(null);
-        setAuthEmail('');
-        setAuthPassword('');
+        setEmailAddress('');
+        setPassword('');
     }
 
     return(

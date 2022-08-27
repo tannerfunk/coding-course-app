@@ -14,11 +14,10 @@ const Courses = () => {
     useEffect(() => {
         const getCourses = async () => {
             await actions.getCourses();
-        };
-
+        }
         getCourses();
     }, []); 
-    // console.log(coursesData);
+
     return (
         <div className="wrap main--grid">
             { courses.map((course, id) => {

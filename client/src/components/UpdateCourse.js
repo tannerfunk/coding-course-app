@@ -1,61 +1,100 @@
-import React, {useState, useEffect} from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
-import config from '../config';
+import React, {useEffect, useContext, useState} from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import {Context} from './Context/Provider';
 import '../styles/reset.css';
 import '../styles/global.css';
 
 const UpdateCourse = () => {
+    const {actions} = useContext(Context);
+    const {course} = useContext(Context);
+    const {user} = useContext(Context);
 
-    const [courseUpdateData, setCourseUpdateData] = useState([]);
+    const goBack = useNavigate();
     const { id } = useParams();
 
-    const url = `${config.apiBaseUrl}/courses/${id}`
+    const [title, setTitle] = useState(course.title);
+    const [desc, setDesc] = useState(course.desc);
+    const [estTime, setEstTime] = useState(course.estTime);
+    const [materialsNeeded, setMaterialsNeeded] = useState(course.materialsNeeded);
+    const [errors, setErrors] = useState([]);
 
-    const getCourseUpdateData = async () => {
-        await axios.get(url)
-            .then(response => setCourseUpdateData(response.data))
-            .catch(error => console.log('Error fetching and parsing data', error))
+	useEffect(() => {
+		const getCourse = async () => {
+			await actions.getCourse(id);
+		};
+		getCourse();
+	}, []);
+
+
+    const updateCourse = (e) => {
+        e.preventDefault();
+
+        const courseInfo = {
+            title,
+            desc,
+            estTime,
+            materialsNeeded,
+            // userId: user.userId
+        }
+
+        actions.updateCourse(id, courseInfo)
+            .then(response => {
+                if (response.errors) {
+                    setErrors(response.errors);
+                } else {
+                    goBack(`/courses${id}`);
+                }
+            })
     }
 
-    useEffect(() => {
-        getCourseUpdateData();
- 
-    }, []); 
 
-    // const [title, setTitle] = useState(`${courseUpdateData.title}`);
-    // const [desc, setDesc] = useState(`${courseUpdateData.description}`);
-    // const [estTime, setEstTime] = useState(`${courseUpdateData.estimatedTime}`);
-    // const [materialsNeeded, setMaterialsNeeded] = useState(`${courseUpdateData.materialsNeeded}`);
-    // const [errors, setErrors] = useState([]);
 
-    return(
-        
-        <div className="wrap">
+    return (
+        <main>
+            <div className='wrap'>
                 <h2>Update Course</h2>
-                <form>
-                    <div className="main--flex">
-                        <div>
-                            <label for="courseTitle">Course Title</label>
-                            <input id="courseTitle" name="courseTitle" type="text" value={courseUpdateData.title}></input>
+            
+                {errors.length > 0 ? (
+                    <div className="validation--errors">
+                    <h3>Validation Errors</h3>
+                    <ul>
+                    {errors.map((error, id) => {
+                        return ( 
+                        <li key={id}>{error}</li>
+                        )
+                    })}
+                    </ul>
+                </div>  
+                ) : (
+                    <></>
+                )}
+                
+                    <form onSubmit={updateCourse}>
+                        <div className="main--flex">
+                            <div>
+                                <label htmlFor="courseTitle">Course Title</label>
+                                <input id="courseTitle" name="courseTitle" type="text" defaultValue={course.title} onChange={e => setTitle(e.target.value)}></input>
 
-                            <p>By Joe Smith</p>
+                                <p>By {course.student.firstName} {course.student.lastName}</p>
 
-                            <label for="courseDescription">Course Description</label>
-                            <textarea id="courseDescription" name="courseDescription" defaultValue={courseUpdateData.description}></textarea>
+                                <label htmlFor="courseDescription">Course Description</label>
+                                <textarea id="courseDescription" name="courseDescription" defaultValue={course.description} onChange={e => setDesc(e.target.value)}></textarea>
+                            </div>
+                            <div>
+                                <label htmlFor="estimatedTime">Estimated Time</label>
+                                <input id="estimatedTime" name="estimatedTime" type="text" defaultValue={course.estimatedTime} onChange={e => setEstTime(e.target.value)}></input>
+
+                                <label htmlFor="materialsNeeded">Materials Needed</label>
+                                <textarea id="materialsNeeded" name="materialsNeeded" defaultValue={course.materialsNeeded} onChange={e => setMaterialsNeeded(e.target.value)}></textarea>
+                            </div>
                         </div>
-                        <div>
-                            <label for="estimatedTime">Estimated Time</label>
-                            <input id="estimatedTime" name="estimatedTime" type="text" value={courseUpdateData.estimatedTime}></input>
-
-                            <label for="materialsNeeded">Materials Needed</label>
-                            <textarea id="materialsNeeded" name="materialsNeeded" defaultValue={courseUpdateData.materialsNeeded}></textarea>
-                        </div>
-                    </div>
-                    <button className="button" type="submit">Update Course</button><button className="button button-secondary" onclick="event.preventDefault(); location.href='index.html';">Cancel</button>
-                </form>
-            </div>
+                        <button className="button" type="submit">Update Course</button>
+                        <Link to={`/courses/${id}`}><button className="button button-secondary" >Cancel</button></Link>
+                    </form>
+                </div>
+        </main>
     )
+    
 
 }
 
