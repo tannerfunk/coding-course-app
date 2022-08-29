@@ -22,7 +22,7 @@ const CourseDetail = (props) => {
 	}, []);
 
     const deleteCourse = () => {
-        actions.deleteCourse(course.id)
+        actions.deleteCourse(id)
             .then(response => {
                 if (response === true) {
                     goHome('/');
@@ -30,13 +30,20 @@ const CourseDetail = (props) => {
             }) 
     }
     // if(course !== null) {}
+    // do the render logic!!!  to show or not show the buttons!!!
     return (
         <>
             <div className="actions--bar">
                 <div className="wrap">
-                    <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-                    <Link className="button" to="#">Delete Course</Link>
+                    {user && course.student.id === user.id ? 
+                    <>
+                        <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
+                        <Link className="button" to="#" onClick={deleteCourse}>Delete Course</Link>
+                        <Link className="button button-secondary" to={`/`}>Return to List</Link>
+                    </>
+                    :
                     <Link className="button button-secondary" to={`/`}>Return to List</Link>
+                    }
                 </div>
             </div>
             <div className="wrap">

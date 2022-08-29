@@ -6,8 +6,8 @@ import {Context} from './Context/Provider';
 
 const CreateCourse = () => {
     const [title, setTitle] = useState('');
-    const [desc, setDesc] = useState('');
-    const [estTime, setEstTime] = useState('');
+    const [description, setDescription] = useState('');
+    const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterialsNeeded] = useState('');
     const [errors, setErrors] = useState([]);
 
@@ -23,37 +23,45 @@ const CreateCourse = () => {
 
         const courseInfo = {
             title,
-            desc,
-            estTime,
+            description,
+            estimatedTime,
             materialsNeeded,
-            userId: user.userId
+            userId: user.id
         }
 
         actions.createCourse(courseInfo)
             .then(response => {
-                if(response.errors) {
-                    setErrors(response.errors);
+                if(response[0]) {
+                    setErrors(response);
                 } else {
                     goHome('/');
                 }
             });
     }
 
-    console.log(user); //blank object.... gotta figure out how to make the user the one who's currently logged in..
-
-
+    // console.log(user); //blank object.... gotta figure out how to make the user the one who's currently logged in..
+    // //did that ^^^ but why is it logging every time i type a letter
 
     return(
         <div className="wrap">
                 <h2>Create Course</h2>
-                <div className="validation--errors">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                        <li>Please provide a value for "Title"</li>
-                        <li>Please provide a value for "Description"</li>
-                    </ul>
-                </div>
-                <form>
+                {errors.length > 0? (
+                    <div className="validation--errors">
+                        <h3>Validation Errors</h3>
+                        <ul>
+                            {errors.map((error, index) => {
+                                return (
+                                    <li key={index}>{error}</li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                ) : (
+                <></>
+                )
+                }
+                
+                <form onSubmit={createCourse}>
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
@@ -62,11 +70,11 @@ const CreateCourse = () => {
                             <p>By {user.firstName} {user.lastName} </p>
 
                             <label htmlFor="courseDescription">Course Description</label>
-                            <textarea id="courseDescription" name="courseDescription"onChange={e => setDesc(e.target.value)}></textarea>
+                            <textarea id="courseDescription" name="courseDescription"onChange={e => setDescription(e.target.value)}></textarea>
                         </div>
                         <div>
                             <label htmlFor="estimatedTime">Estimated Time</label>
-                            <input id="estimatedTime" name="estimatedTime" type="text"onChange={e => setEstTime(e.target.value)}></input>
+                            <input id="estimatedTime" name="estimatedTime" type="text"onChange={e => setEstimatedTime(e.target.value)}></input>
 
                             <label htmlFor="materialsNeeded">Materials Needed</label>
                             <textarea id="materialsNeeded" name="materialsNeeded"onChange={e => setMaterialsNeeded(e.target.value)}></textarea>
@@ -76,8 +84,7 @@ const CreateCourse = () => {
                     <Link to="/"><button className="button button-secondary">Cancel</button></Link>
                 </form>
             </div>
-    )
-
+        )
 }
 
 

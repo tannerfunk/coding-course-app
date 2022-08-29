@@ -26,8 +26,9 @@ const UserSignUp = () => {
 
         actions.signUp(userInfo)
             .then (response => {
-                if (response.errors) {
-                    setErrors(response.errors);
+                console.log(response);
+                if (response[0]) {
+                    setErrors(response);
                 } else {
                     actions.signIn(emailAddress, password)
                     goHome('/');
@@ -38,6 +39,19 @@ const UserSignUp = () => {
     return(
         <div className="form--centered">
             <h2>Sign Up</h2>
+
+            {errors.length > 0 ? (
+                <div className="validation--errors">
+                    <h3>Validation Errors</h3>
+                    <ul>
+                        {errors.map((error, index) => {
+                            return (
+                                <li key= {index}>{error}</li>
+                            )
+                        })}
+                    </ul>
+                </div>
+            ) : ( <></> )}
                 
             <form onSubmit={signUp}>
                 <label htmlFor="firstName">First Name</label>

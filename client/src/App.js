@@ -11,6 +11,8 @@ import CreateCourse from './components/CreateCourse';
 import UpdateCourse from './components/UpdateCourse';
 import UserSignOut from './components/UserSignOut';
 
+import PrivateRoute from './components/PrivateRoute'
+
 function App() {
   
   return (
@@ -23,8 +25,10 @@ function App() {
         <Route path='/courses/:id' element={ <CourseDetail />} />
         <Route path='/signin' element={ <UserSignIn />} />
         <Route path='/signup' element={ <UserSignUp /> } />
-        <Route path='/courses/create' element={ <CreateCourse />} />
-        <Route path='/courses/:id/update' element={ <UpdateCourse />} />
+        <Route path='/' element={ <PrivateRoute />}>
+          <Route path='/courses/create' element={ <CreateCourse />} />
+          <Route path='/courses/:id/update' element={ <UpdateCourse />} />
+        </Route>
         <Route path='/signout' element={ <UserSignOut />} />
       </Routes>
     </>

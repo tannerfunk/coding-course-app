@@ -10,6 +10,7 @@ const Courses = () => {
 
     const {actions} = useContext(Context);
     const {courses} = useContext(Context);
+    const {user} = useContext(Context);
 
     useEffect(() => {
         const getCourses = async () => {

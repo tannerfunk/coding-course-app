@@ -18,9 +18,10 @@ export const Provider = ({ children }) => {
         }
     });
     const [user, setUser] = useState({
-        firstName: "",
-        lastName: "",
-        emailAddress: "",
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        id: null
     });
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
@@ -106,10 +107,10 @@ export const Provider = ({ children }) => {
         }
       };
 
-    async function createCourse(course, emailAddress, password) {
-        const response = await api(`/courses`, 'POST', course, true, {emailAddress, password});
+    async function createCourse(courseInfo) {
+        const response = await api(`/courses`, 'POST', courseInfo, true, {emailAddress, password});
         if (response.status === 201) {
-            return response.json()
+            return response;
         } else if (response.status === 400) {
             return response.json()
                 .then(data => {
@@ -120,11 +121,10 @@ export const Provider = ({ children }) => {
         }
     }
 
-    async function updateCourse(id, emailAddress, password) {
-        console.log(id);
-        const response = await api(`/courses/${id}`, 'PUT', course, true, {emailAddress, password});
+    async function updateCourse(id, courseInfo) {
+        const response = await api(`/courses/${id}`, 'PUT', courseInfo, true, {emailAddress, password});
         if (response.status === 204) {
-            return response.json()
+            return true;
         } else if (response.status === 400) {
             return response.json()
                 .then(data => {
@@ -135,10 +135,10 @@ export const Provider = ({ children }) => {
         }
     }
 
-    async function deleteCourse(id, emailAddress, password) {
+    async function deleteCourse(id) {
         const response = await api(`/courses/${id}`, 'DELETE', null, true, {emailAddress, password});
         if (response.status === 204) {
-            return null;
+            return true;
         } else {
             throw new Error();
         }

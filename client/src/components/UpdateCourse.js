@@ -13,8 +13,8 @@ const UpdateCourse = () => {
     const { id } = useParams();
 
     const [title, setTitle] = useState(course.title);
-    const [desc, setDesc] = useState(course.desc);
-    const [estTime, setEstTime] = useState(course.estTime);
+    const [description, setDescription] = useState(course.description);
+    const [estimatedTime, setEstimatedTime] = useState(course.estimatedTime);
     const [materialsNeeded, setMaterialsNeeded] = useState(course.materialsNeeded);
     const [errors, setErrors] = useState([]);
 
@@ -31,18 +31,18 @@ const UpdateCourse = () => {
 
         const courseInfo = {
             title,
-            desc,
-            estTime,
+            description,
+            estimatedTime,
             materialsNeeded,
-            // userId: user.userId
+            userId: user.id
         }
 
         actions.updateCourse(id, courseInfo)
             .then(response => {
-                if (response.errors) {
-                    setErrors(response.errors);
+                if (response[0]) {
+                    setErrors(response);
                 } else {
-                    goBack(`/courses${id}`);
+                    goBack(`/courses/${id}`);
                 }
             })
     }
@@ -78,11 +78,11 @@ const UpdateCourse = () => {
                                 <p>By {course.student.firstName} {course.student.lastName}</p>
 
                                 <label htmlFor="courseDescription">Course Description</label>
-                                <textarea id="courseDescription" name="courseDescription" defaultValue={course.description} onChange={e => setDesc(e.target.value)}></textarea>
+                                <textarea id="courseDescription" name="courseDescription" defaultValue={course.description} onChange={e => setDescription(e.target.value)}></textarea>
                             </div>
                             <div>
                                 <label htmlFor="estimatedTime">Estimated Time</label>
-                                <input id="estimatedTime" name="estimatedTime" type="text" defaultValue={course.estimatedTime} onChange={e => setEstTime(e.target.value)}></input>
+                                <input id="estimatedTime" name="estimatedTime" type="text" defaultValue={course.estimatedTime} onChange={e => setEstimatedTime(e.target.value)}></input>
 
                                 <label htmlFor="materialsNeeded">Materials Needed</label>
                                 <textarea id="materialsNeeded" name="materialsNeeded" defaultValue={course.materialsNeeded} onChange={e => setMaterialsNeeded(e.target.value)}></textarea>
