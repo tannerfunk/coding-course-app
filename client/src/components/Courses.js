@@ -5,12 +5,11 @@ import '../styles/reset.css';
 import '../styles/global.css';
 
 
-
+//This gets the courses and displays them in a grid.
 const Courses = () => {
 
     const {actions} = useContext(Context);
     const {courses} = useContext(Context);
-    const {user} = useContext(Context);
 
     useEffect(() => {
         const getCourses = async () => {

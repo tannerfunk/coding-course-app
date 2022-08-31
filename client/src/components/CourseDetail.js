@@ -5,6 +5,8 @@ import {Context} from './Context/Provider';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+
+//this pulls the course data and user data to provide the viewer with what the course is and who made it.
 const CourseDetail = (props) => {
     const {actions} = useContext(Context);
     const {course} = useContext(Context);

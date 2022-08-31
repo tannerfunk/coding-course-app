@@ -4,6 +4,7 @@ import {Buffer} from 'buffer';
 
 export const Context = createContext();
 
+//this will be my provider component to provide state through context
 export const Provider = ({ children }) => {
     const [courses, setCourses] = useState([]);
     const [course, setCourse] = useState({
@@ -26,6 +27,7 @@ export const Provider = ({ children }) => {
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
 
+    //My api function that I will use for all of my API calls to connect to the database that I made previously
     function api(path, method, body = null, requiresAuth = false, credentials = null) {
         const url = config.apiBaseUrl + path;
 
@@ -48,6 +50,8 @@ export const Provider = ({ children }) => {
         const fetched = fetch(url, options);
         return fetched;
     };
+
+    // API CALLS
 
     async function getUser(emailAddress, password) {
         const response = await api(`/users`, 'GET', null, true, { emailAddress, password });

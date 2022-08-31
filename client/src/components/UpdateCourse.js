@@ -4,6 +4,7 @@ import {Context} from './Context/Provider';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+//this function pulls in from CONTEXT the global state of the values for the respective spots.. this way they have them and can be modified, after they click submit the values will then be set to the global state
 const UpdateCourse = () => {
     const {actions} = useContext(Context);
     const {course} = useContext(Context);
@@ -18,6 +19,7 @@ const UpdateCourse = () => {
     const [materialsNeeded, setMaterialsNeeded] = useState(course.materialsNeeded);
     const [errors, setErrors] = useState([]);
 
+    //on page load pull the data needed
 	useEffect(() => {
 		const getCourse = async () => {
 			await actions.getCourse(id);
@@ -25,7 +27,7 @@ const UpdateCourse = () => {
 		getCourse();
 	}, []);
 
-
+    //This sets the data to the global state
     const updateCourse = (e) => {
         e.preventDefault();
 

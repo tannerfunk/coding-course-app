@@ -6,7 +6,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {Context} from './Context/Provider';
 
 
-
+//handles the user sign in experience by checking to maake sure credentials are all good etc
 const UserSignIn = () => {
 
     const {actions} = useContext(Context);

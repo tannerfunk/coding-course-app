@@ -21,6 +21,7 @@ const UserSignUp = () => {
         password
     }
 
+    //uses user input to send data to set the state using context and calls the API and then signs them in.
     const signUp = (e) => {
         e.preventDefault();
 

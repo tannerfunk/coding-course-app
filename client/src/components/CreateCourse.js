@@ -4,6 +4,7 @@ import '../styles/reset.css';
 import '../styles/global.css';
 import {Context} from './Context/Provider';
 
+// creates the course and sets the data state to be the information provided by user
 const CreateCourse = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -38,9 +39,6 @@ const CreateCourse = () => {
                 }
             });
     }
-
-    // console.log(user); //blank object.... gotta figure out how to make the user the one who's currently logged in..
-    // //did that ^^^ but why is it logging every time i type a letter
 
     return(
         <div className="wrap">
